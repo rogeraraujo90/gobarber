@@ -1,0 +1,7 @@
+node_modules
+dist
+.vscode
+tmp/**
+!tmp
+!tmp/uploaded_avatars
+yarn-error*
