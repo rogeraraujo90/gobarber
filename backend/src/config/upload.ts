@@ -2,9 +2,19 @@ import crypto from 'crypto';
 import path from 'path';
 import multer from 'multer';
 
+const uploadsPath = path.resolve(
+  __dirname,
+  '..',
+  '..',
+  'tmp',
+  'uploaded_avatars'
+);
+
 export default {
+  uploadsPath,
+
   storage: multer.diskStorage({
-    destination: path.resolve(__dirname, '..', '..', 'tmp', 'uploaded_avatars'),
+    destination: uploadsPath,
     filename(request, file, callback) {
       const hashedName = crypto.randomBytes(10).toString('HEX');
       const fileName = `${hashedName}-${file.originalname}`;

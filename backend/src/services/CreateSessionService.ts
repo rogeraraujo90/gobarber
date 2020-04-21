@@ -3,6 +3,7 @@ import { compare } from 'bcryptjs';
 import { getRepository } from 'typeorm';
 import User from '../models/User';
 import config from '../config/auth';
+import AppError from '../errors/AppError';
 
 interface Request {
   email: string;
@@ -15,13 +16,13 @@ export default class CreateSessionService {
     const user = await userRepository.findOne({ where: { email } });
 
     if (!user) {
-      throw new Error('Wrong email or password');
+      throw new AppError('Wrong email or password', 401);
     }
 
     const isPasswordCorrect = await compare(password, user.password);
 
     if (!isPasswordCorrect) {
-      throw new Error('Wrong email or password');
+      throw new AppError('Wrong email or password', 401);
     }
 
     const { secret, expiresIn } = config.jwt;
