@@ -10,8 +10,13 @@ interface Request {
   password: string;
 }
 
+interface Response {
+  token: string;
+  user: User;
+}
+
 export default class CreateSessionService {
-  public async execute({ email, password }: Request): Promise<string> {
+  public async execute({ email, password }: Request): Promise<Response> {
     const userRepository = getRepository(User);
     const user = await userRepository.findOne({ where: { email } });
 
@@ -32,6 +37,6 @@ export default class CreateSessionService {
       expiresIn,
     });
 
-    return token;
+    return { token, user };
   }
 }

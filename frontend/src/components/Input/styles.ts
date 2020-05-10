@@ -1,8 +1,10 @@
 import styled, { css } from 'styled-components';
+import Tootip from '../Tooltip';
 
 interface ContainerProps {
   isInputFocused: boolean;
   isInputFilled: boolean;
+  hasError: boolean;
 }
 
 const Container = styled.div<ContainerProps>`
@@ -15,6 +17,12 @@ const Container = styled.div<ContainerProps>`
 
   border: 2px solid #232129;
   color: #666360;
+
+  ${({ hasError }) =>
+    hasError &&
+    css`
+      border-color: #c53030;
+    `}
 
   ${({ isInputFocused }) =>
     isInputFocused &&
@@ -49,4 +57,22 @@ const Container = styled.div<ContainerProps>`
   }
 `;
 
-export { Container };
+const ErrorContainer = styled(Tootip)`
+  height: 20px;
+  margin-left: 16px;
+
+  svg {
+    margin: 0;
+  }
+
+  span {
+    background: #c53030;
+    color: #fff;
+
+    &::before {
+      border-color: #c53030 transparent;
+    }
+  }
+`;
+
+export { Container, ErrorContainer };
