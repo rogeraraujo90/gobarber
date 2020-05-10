@@ -15,6 +15,7 @@ interface AuthContextData {
   loggedUser: object;
   signIn(credentials: Credentials): Promise<void>;
   signOut(): void;
+  isAuthenticated(): boolean;
 }
 
 const AuthContext = createContext<AuthContextData>({} as AuthContextData);
@@ -50,9 +51,18 @@ const AuthContextProvider: React.FC = ({ children }) => {
     setSessionData({} as SessionData);
   }, []);
 
+  const isAuthenticated = useCallback(() => {
+    return !!sessionData.loggedUser;
+  }, [sessionData.loggedUser]);
+
   return (
     <AuthContext.Provider
-      value={{ loggedUser: sessionData.loggedUser, signIn, signOut }}
+      value={{
+        loggedUser: sessionData.loggedUser,
+        signIn,
+        signOut,
+        isAuthenticated,
+      }}
     >
       {children}
     </AuthContext.Provider>
