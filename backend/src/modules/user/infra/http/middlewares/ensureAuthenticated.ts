@@ -1,9 +1,9 @@
 import { verify } from 'jsonwebtoken';
 import { Request, Response, NextFunction } from 'express';
-import config from '../config/auth';
-import AppError from '../errors/AppError';
+import config from '@config/auth';
+import AppError from '@shared/errors/AppError';
 
-interface TokenPayload {
+interface ITokenPayload {
   iat: number;
   exp: number;
   sub: string;
@@ -24,7 +24,7 @@ export default function ensureAuthenticated(
 
   try {
     const decodedToken = verify(token, config.jwt.secret);
-    const { sub } = decodedToken as TokenPayload;
+    const { sub } = decodedToken as ITokenPayload;
 
     request.user = { id: sub };
   } catch {
