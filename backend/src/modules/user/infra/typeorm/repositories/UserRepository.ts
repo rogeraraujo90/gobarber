@@ -30,11 +30,11 @@ class UserRepository implements IUserRepository {
     return this.ormRepository.findOne(id);
   }
 
-  findByEmail(email: string): Promise<User | undefined> {
+  public async findByEmail(email: string): Promise<User | undefined> {
     return this.ormRepository.findOne({ email });
   }
 
-  save(user: User): Promise<User> {
+  public async save(user: User): Promise<User> {
     return this.ormRepository.save(user);
   }
 }

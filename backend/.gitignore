@@ -5,3 +5,4 @@ tmp/**
 !tmp
 !tmp/uploaded_avatars
 yarn-error*
+coverage

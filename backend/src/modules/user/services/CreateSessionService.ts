@@ -1,10 +1,10 @@
 import { sign } from 'jsonwebtoken';
-import { compare } from 'bcryptjs';
 import { injectable, inject } from 'tsyringe';
 import User from '@modules/user/infra/typeorm/entities/User';
 import config from '@config/auth';
 import AppError from '@shared/errors/AppError';
 import IUserRepository from '../repositories/IUserRepository';
+import IHashProvider from '../providers/IHashProvider';
 
 interface IRequest {
   email: string;
@@ -20,8 +20,14 @@ interface IResponse {
 export default class CreateSessionService {
   private userRepository: IUserRepository;
 
-  constructor(@inject('UserRepository') userRepository: IUserRepository) {
+  private hashProvider: IHashProvider;
+
+  constructor(
+    @inject('UserRepository') userRepository: IUserRepository,
+    @inject('HashProvider') hashProvider: IHashProvider
+  ) {
     this.userRepository = userRepository;
+    this.hashProvider = hashProvider;
   }
 
   public async execute({ email, password }: IRequest): Promise<IResponse> {
@@ -31,7 +37,10 @@ export default class CreateSessionService {
       throw new AppError('Wrong email or password', 401);
     }
 
-    const isPasswordCorrect = await compare(password, user.password);
+    const isPasswordCorrect = await this.hashProvider.compareHash(
+      password,
+      user.password
+    );
 
     if (!isPasswordCorrect) {
       throw new AppError('Wrong email or password', 401);
