@@ -1,6 +1,8 @@
 import { injectable, inject } from 'tsyringe';
 import IMailProvider from '@shared/providers/IMailProvider';
+import AppError from '@shared/errors/AppError';
 import IUserRepository from '../repositories/IUserRepository';
+import IResetPasswordTokenRepository from '../repositories/IResetPasswordTokenRepository';
 
 interface IRequest {
   email: string;
@@ -8,19 +10,28 @@ interface IRequest {
 
 @injectable()
 export default class CreateUserService {
-  private userRepository: IUserRepository;
-
-  private mailProvider: IMailProvider;
-
   constructor(
-    @inject('UserRepository') userRepository: IUserRepository,
-    @inject('MailProvider') mailProvider: IMailProvider
-  ) {
-    this.userRepository = userRepository;
-    this.mailProvider = mailProvider;
-  }
+    @inject('UserRepository')
+    private userRepository: IUserRepository,
+
+    @inject('MailProvider')
+    private mailProvider: IMailProvider,
+
+    @inject('ResetPassowrdTokenRepository')
+    private resetPassowrdTokenRepository: IResetPasswordTokenRepository
+  ) {}
 
   public async execute({ email }: IRequest): Promise<void> {
-    this.mailProvider.sendMail(email, 'Recover password request received.');
+    const user = await this.userRepository.findByEmail(email);
+
+    if (user) {
+      await this.resetPassowrdTokenRepository.create(user.id);
+      await this.mailProvider.sendMail(
+        email,
+        'Recover password request received.'
+      );
+    } else {
+      throw new AppError('There is no user with the given email');
+    }
   }
 }
