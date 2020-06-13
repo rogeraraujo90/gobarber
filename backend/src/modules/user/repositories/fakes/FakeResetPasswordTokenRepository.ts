@@ -10,7 +10,13 @@ class FakeResetPassowrdTokenRepository
   public async create(userId: string): Promise<ResetPasswordToken> {
     const token = new ResetPasswordToken();
 
-    Object.assign(token, { id: uuid(), userId });
+    Object.assign(token, {
+      id: uuid(),
+      createdAt: new Date(),
+      updatedAt: new Date(),
+      userId,
+    });
+
     this.tokens.push(token);
 
     return token;
