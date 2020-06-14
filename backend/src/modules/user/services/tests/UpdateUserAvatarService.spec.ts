@@ -1,7 +1,7 @@
 import 'reflect-metadata';
 import AppError from '@shared/errors/AppError';
 import FakeUsersRepository from '@modules/user/repositories/fakes/FakeUsersRepository';
-import FakeDiskStorageProvider from '@shared/providers/fakes/FakeDiskStorageProvider';
+import FakeDiskStorageProvider from '@shared/providers/storage/fakes/FakeDiskStorageProvider';
 import UpdateUserAvatarService from '../UpdateUserAvatarService';
 
 describe('Update user avatar', () => {

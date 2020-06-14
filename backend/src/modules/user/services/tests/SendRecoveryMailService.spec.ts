@@ -1,24 +1,29 @@
 import 'reflect-metadata';
 import FakeUsersRepository from '@modules/user/repositories/fakes/FakeUsersRepository';
-import FakeMailProvider from '@shared/providers/fakes/FakeMailProvider';
+import FakeMailProvider from '@shared/providers/mail/fakes/FakeMailProvider';
 import AppError from '@shared/errors/AppError';
-import FakeResetPassowrdTokenRepository from '@modules/user/repositories/fakes/FakeResetPasswordTokenRepository';
+import FakeResetPasswordTokenRepository from '@modules/user/repositories/fakes/FakeResetPasswordTokenRepository';
+import FakeDiskStorageProvider from '@shared/providers/storage/fakes/FakeDiskStorageProvider';
 import SendRecoveryMailService from '../SendRecoveryMailService';
 
 let fakeRepository: FakeUsersRepository;
 let fakeMailProvider: FakeMailProvider;
-let fakeResetPasswordTokenRepository: FakeResetPassowrdTokenRepository;
+let fakeResetPasswordTokenRepository: FakeResetPasswordTokenRepository;
+let fakeDiskStorageProvider: FakeDiskStorageProvider;
 let service: SendRecoveryMailService;
 
 describe('Send Recovery Mail', () => {
   beforeEach(() => {
     fakeRepository = new FakeUsersRepository();
     fakeMailProvider = new FakeMailProvider();
-    fakeResetPasswordTokenRepository = new FakeResetPassowrdTokenRepository();
+    fakeResetPasswordTokenRepository = new FakeResetPasswordTokenRepository();
+    fakeDiskStorageProvider = new FakeDiskStorageProvider();
+
     service = new SendRecoveryMailService(
       fakeRepository,
       fakeMailProvider,
-      fakeResetPasswordTokenRepository
+      fakeResetPasswordTokenRepository,
+      fakeDiskStorageProvider
     );
   });
 
@@ -37,10 +42,7 @@ describe('Send Recovery Mail', () => {
     await service.execute(mailData);
 
     expect(sendMailMethod).toHaveBeenCalledTimes(1);
-    expect(sendMailMethod).toHaveBeenCalledWith(
-      mailData.email,
-      'Recover password request received.'
-    );
+    expect(sendMailMethod).toHaveBeenCalledTimes(1);
     expect(findByMailMethod).toHaveBeenCalledTimes(1);
     expect(findByMailMethod).toHaveBeenCalledWith(mailData.email);
   });

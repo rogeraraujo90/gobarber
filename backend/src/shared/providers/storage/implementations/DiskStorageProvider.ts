@@ -2,7 +2,7 @@ import path from 'path';
 import fs from 'fs';
 
 import uploadConfig from '@config/upload';
-import IStorageProvider from '@shared/providers/IStorageProvider';
+import IStorageProvider from '@shared/providers/storage/IStorageProvider';
 
 class DiskStorageProvider implements IStorageProvider {
   public async saveFile(filePath: string): Promise<string> {
@@ -16,6 +16,10 @@ class DiskStorageProvider implements IStorageProvider {
     if (fileExists) {
       await fs.promises.unlink(filePath);
     }
+  }
+
+  public async readFile(filePath: string): Promise<string> {
+    return fs.promises.readFile(filePath, { encoding: 'utf-8' });
   }
 }
 

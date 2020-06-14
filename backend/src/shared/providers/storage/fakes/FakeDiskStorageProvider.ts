@@ -13,6 +13,10 @@ class FakeDiskStorageProvider implements IStorageProvider {
 
     this.files.splice(fileIndex, 1);
   }
+
+  public async readFile(filePath: string): Promise<string> {
+    return `Reading ${filePath}`;
+  }
 }
 
 export default FakeDiskStorageProvider;

@@ -1,6 +1,6 @@
 import { hash, compare } from 'bcryptjs';
 
-import IHashProvider from '@modules/user/providers/IHashProvider';
+import IHashProvider from '@shared/providers/hash/IHashProvider';
 
 class BCryptHashProvider implements IHashProvider {
   public async createHash(payload: string): Promise<string> {

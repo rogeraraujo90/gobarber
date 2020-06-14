@@ -3,7 +3,7 @@ import { uuid } from 'uuidv4';
 import ResetPasswordToken from '@modules/user/infra/typeorm/entities/ResetPasswordToken';
 import IResetPasswordTokenRepository from '../IResetPasswordTokenRepository';
 
-class FakeResetPassowrdTokenRepository
+class FakeResetPasswordTokenRepository
   implements IResetPasswordTokenRepository {
   private tokens: ResetPasswordToken[] = [];
 
@@ -12,8 +12,8 @@ class FakeResetPassowrdTokenRepository
 
     Object.assign(token, {
       id: uuid(),
-      createdAt: new Date(),
-      updatedAt: new Date(),
+      created_at: new Date(),
+      updated_at: new Date(),
       userId,
     });
 
@@ -27,4 +27,4 @@ class FakeResetPassowrdTokenRepository
   }
 }
 
-export default FakeResetPassowrdTokenRepository;
+export default FakeResetPasswordTokenRepository;

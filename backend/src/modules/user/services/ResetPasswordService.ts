@@ -3,7 +3,7 @@ import { differenceInHours } from 'date-fns';
 import AppError from '@shared/errors/AppError';
 import IUserRepository from '../repositories/IUserRepository';
 import IResetPasswordTokenRepository from '../repositories/IResetPasswordTokenRepository';
-import IHashProvider from '../providers/IHashProvider';
+import IHashProvider from '../../../shared/providers/hash/IHashProvider';
 
 interface IRequest {
   token: string;
@@ -16,7 +16,7 @@ export default class ResetPasswordService {
     @inject('UserRepository')
     private userRepository: IUserRepository,
 
-    @inject('ResetPassowrdTokenRepository')
+    @inject('ResetPasswordTokenRepository')
     private resetPasswordTokenRepository: IResetPasswordTokenRepository,
 
     @inject('HashProvider')
@@ -32,7 +32,7 @@ export default class ResetPasswordService {
       throw new AppError('Reset token not found.');
     }
 
-    const tokenCreationDate = resetPasswordToken.createdAt;
+    const tokenCreationDate = resetPasswordToken.created_at;
 
     if (differenceInHours(Date.now(), tokenCreationDate) > 2) {
       throw new AppError('Token expired.');

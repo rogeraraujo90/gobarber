@@ -1,19 +1,19 @@
 import 'reflect-metadata';
 import FakeUsersRepository from '@modules/user/repositories/fakes/FakeUsersRepository';
-import FakeResetPassowrdTokenRepository from '@modules/user/repositories/fakes/FakeResetPasswordTokenRepository';
+import FakeResetPasswordTokenRepository from '@modules/user/repositories/fakes/FakeResetPasswordTokenRepository';
 import AppError from '@shared/errors/AppError';
-import FakeHashProvider from '@modules/user/providers/fakes/FakeHashProvider';
+import FakeHashProvider from '@shared/providers/hash/fakes/FakeHashProvider';
 import ResetPasswordService from '../ResetPasswordService';
 
 let fakeRepository: FakeUsersRepository;
-let fakeResetPasswordTokenRepository: FakeResetPassowrdTokenRepository;
+let fakeResetPasswordTokenRepository: FakeResetPasswordTokenRepository;
 let fakeHashProvider: FakeHashProvider;
 let service: ResetPasswordService;
 
 describe('Reset password', () => {
   beforeEach(() => {
     fakeRepository = new FakeUsersRepository();
-    fakeResetPasswordTokenRepository = new FakeResetPassowrdTokenRepository();
+    fakeResetPasswordTokenRepository = new FakeResetPasswordTokenRepository();
     fakeHashProvider = new FakeHashProvider();
 
     service = new ResetPasswordService(

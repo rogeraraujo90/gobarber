@@ -1,7 +1,7 @@
 import 'reflect-metadata';
 import AppError from '@shared/errors/AppError';
 import FakeUsersRepository from '@modules/user/repositories/fakes/FakeUsersRepository';
-import FakeHashProvider from '@modules/user/providers/fakes/FakeHashProvider';
+import FakeHashProvider from '@shared/providers/hash/fakes/FakeHashProvider';
 import CreateUserService from '../CreateUserService';
 
 describe('Create Appointment', () => {

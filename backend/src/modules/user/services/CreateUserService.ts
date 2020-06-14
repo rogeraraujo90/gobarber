@@ -2,7 +2,7 @@ import { injectable, inject } from 'tsyringe';
 import User from '@modules/user/infra/typeorm/entities/User';
 import AppError from '@shared/errors/AppError';
 import IUserRepository from '../repositories/IUserRepository';
-import IHashProvider from '../providers/IHashProvider';
+import IHashProvider from '../../../shared/providers/hash/IHashProvider';
 
 interface IRequest {
   name: string;
