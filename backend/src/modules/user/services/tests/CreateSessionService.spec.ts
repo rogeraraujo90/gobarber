@@ -5,24 +5,26 @@ import FakeHashProvider from '@shared/providers/hash/fakes/FakeHashProvider';
 import CreateSessionService from '../CreateSessionService';
 import CreateUserService from '../CreateUserService';
 
-describe('Create Session', () => {
-  it('should be able to authenticate an user', async () => {
-    const fakeRepository = new FakeUsersRepository();
-    const hashProvider = new FakeHashProvider();
-    const createUserService = new CreateUserService(
-      fakeRepository,
-      hashProvider
-    );
-    const service = new CreateSessionService(fakeRepository, hashProvider);
+let fakeRepository: FakeUsersRepository;
+let hashProvider: FakeHashProvider;
+let createUserService: CreateUserService;
+let service: CreateSessionService;
 
+describe('Create Session', () => {
+  beforeEach(() => {
+    fakeRepository = new FakeUsersRepository();
+    hashProvider = new FakeHashProvider();
+    createUserService = new CreateUserService(fakeRepository, hashProvider);
+    service = new CreateSessionService(fakeRepository, hashProvider);
+  });
+
+  it('should be able to authenticate an user', async () => {
     const userData = {
       name: 'Arya Stark',
       email: 'arya@gobarber.com',
       password: '123456',
     };
-
     const createdUser = await createUserService.execute(userData);
-
     const session = await service.execute({
       email: 'arya@gobarber.com',
       password: '123456',
@@ -34,10 +36,6 @@ describe('Create Session', () => {
   });
 
   it("shouldn't be able to authenticate an user not registered", async () => {
-    const fakeRepository = new FakeUsersRepository();
-    const hashProvider = new FakeHashProvider();
-    const service = new CreateSessionService(fakeRepository, hashProvider);
-
     const userData = {
       email: 'arya@gobarber.com',
       password: '123456',
@@ -47,14 +45,6 @@ describe('Create Session', () => {
   });
 
   it("shouldn't be able to authenticate an user with wrong password", async () => {
-    const fakeRepository = new FakeUsersRepository();
-    const hashProvider = new FakeHashProvider();
-    const createUserService = new CreateUserService(
-      fakeRepository,
-      hashProvider
-    );
-    const service = new CreateSessionService(fakeRepository, hashProvider);
-
     const userData = {
       name: 'Arya Stark',
       email: 'arya@gobarber.com',

@@ -4,18 +4,28 @@ import FakeUsersRepository from '@modules/user/repositories/fakes/FakeUsersRepos
 import FakeHashProvider from '@shared/providers/hash/fakes/FakeHashProvider';
 import CreateUserService from '../CreateUserService';
 
-describe('Create Appointment', () => {
-  it('should be able to create a new User', async () => {
-    const fakeRepository = new FakeUsersRepository();
-    const hashProvider = new FakeHashProvider();
-    const service = new CreateUserService(fakeRepository, hashProvider);
+let fakeRepository: FakeUsersRepository;
+let hashProvider: FakeHashProvider;
+let service: CreateUserService;
+let userData: {
+  name: string;
+  email: string;
+  password: string;
+};
 
-    const userData = {
+describe('Create Appointment', () => {
+  beforeEach(() => {
+    fakeRepository = new FakeUsersRepository();
+    hashProvider = new FakeHashProvider();
+    service = new CreateUserService(fakeRepository, hashProvider);
+    userData = {
       name: 'Arya Stark',
       email: 'arya@gobarber.com',
       password: '123456',
     };
+  });
 
+  it('should be able to create a new User', async () => {
     const user = await service.execute(userData);
 
     expect(user).toHaveProperty('id');
@@ -25,16 +35,6 @@ describe('Create Appointment', () => {
   });
 
   it("shouldn't be able to create a new User with an existent email", async () => {
-    const fakeRepository = new FakeUsersRepository();
-    const hashProvider = new FakeHashProvider();
-    const service = new CreateUserService(fakeRepository, hashProvider);
-
-    const userData = {
-      name: 'Arya Stark',
-      email: 'arya@gobarber.com',
-      password: '123456',
-    };
-
     await service.execute(userData);
 
     expect(service.execute(userData)).rejects.toBeInstanceOf(AppError);
