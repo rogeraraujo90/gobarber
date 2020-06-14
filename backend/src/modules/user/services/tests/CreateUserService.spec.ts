@@ -36,7 +36,6 @@ describe('Create Appointment', () => {
 
   it("shouldn't be able to create a new User with an existent email", async () => {
     await service.execute(userData);
-
-    expect(service.execute(userData)).rejects.toBeInstanceOf(AppError);
+    await expect(service.execute(userData)).rejects.toBeInstanceOf(AppError);
   });
 });

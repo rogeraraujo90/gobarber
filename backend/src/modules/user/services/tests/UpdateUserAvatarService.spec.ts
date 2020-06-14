@@ -35,7 +35,7 @@ describe('Update user avatar', () => {
   });
 
   it('should not be able to add an avatar to a not existing user', async () => {
-    expect(
+    await expect(
       service.execute({
         userId: '1',
         avatarFileName: 'avatar.png',

@@ -53,7 +53,7 @@ describe('Create Session', () => {
 
     await createUserService.execute(userData);
 
-    expect(
+    await expect(
       service.execute({
         email: 'arya@gobarber.com',
         password: '1234',
