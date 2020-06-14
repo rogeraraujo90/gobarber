@@ -49,8 +49,11 @@ export default class UpdateProfileService {
     user.email = email;
 
     if (password) {
-      if (user.password === oldPassword) {
-        user.password = password;
+      if (
+        oldPassword &&
+        (await this.hashProvider.compareHash(oldPassword, user.password))
+      ) {
+        user.password = await this.hashProvider.createHash(password);
       } else {
         throw new AppError(
           'The oldPassword is required in order to update the password.'
