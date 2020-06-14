@@ -3,7 +3,6 @@ import { injectable, inject } from 'tsyringe';
 import User from '@modules/user/infra/typeorm/entities/User';
 import AppError from '@shared/errors/AppError';
 import IHashProvider from '@shared/providers/hash/IHashProvider';
-import { th } from 'date-fns/locale';
 import IUserRepository from '../repositories/IUserRepository';
 
 interface IRequest {
