@@ -1,6 +1,7 @@
-import { Repository, getRepository } from 'typeorm';
+import { Repository, getRepository, Not, In } from 'typeorm';
 import IUserRepository from '@modules/user/repositories/IUserRepository';
 import ICreateUserDTO from '@modules/user/dtos/ICreateUserDTO';
+import IFindUsersDTO from '@modules/user/dtos/IFindUsersDTO';
 import User from '../entities/User';
 
 class UserRepository implements IUserRepository {
@@ -24,6 +25,16 @@ class UserRepository implements IUserRepository {
     await this.ormRepository.save(user);
 
     return user;
+  }
+
+  public async find({ exceptUsersIds }: IFindUsersDTO): Promise<User[]> {
+    return exceptUsersIds
+      ? this.ormRepository.find({
+          where: {
+            id: Not(In(exceptUsersIds)),
+          },
+        })
+      : this.ormRepository.find();
   }
 
   public async findById(id: string): Promise<User | undefined> {
