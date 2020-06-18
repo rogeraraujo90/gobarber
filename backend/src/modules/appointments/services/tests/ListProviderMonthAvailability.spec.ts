@@ -19,16 +19,21 @@ describe('List provider month availability', () => {
       date: new Date(2020, 4, 13, 6, 0, 0),
     });
 
-    await appointmentsRepository.create({
-      providerId,
-      date: new Date(2020, 5, 14, 5, 0, 0),
-    });
+    let hour = 8;
+    const createAppointmentsPromises = [];
 
-    await appointmentsRepository.create({
-      providerId,
-      date: new Date(2020, 5, 14, 6, 0, 0),
-    });
+    while (hour < 18) {
+      createAppointmentsPromises.push(
+        appointmentsRepository.create({
+          providerId,
+          date: new Date(2020, 5, 14, hour, 0, 0),
+        })
+      );
 
+      hour += 1;
+    }
+
+    await Promise.all(createAppointmentsPromises);
     await appointmentsRepository.create({
       providerId,
       date: new Date(2020, 5, 15, 6, 0, 0),
@@ -40,12 +45,12 @@ describe('List provider month availability', () => {
       yeah: 2020,
     });
 
-    expect(availability).toBe(
+    expect(availability).toEqual(
       expect.arrayContaining([
-        { day: 13, availability: true },
-        { day: 14, availability: false },
-        { day: 15, availability: false },
-        { day: 16, availability: true },
+        { available: true, day: 13 },
+        { available: false, day: 14 },
+        { available: true, day: 15 },
+        { available: true, day: 16 },
       ])
     );
   });

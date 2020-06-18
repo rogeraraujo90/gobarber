@@ -1,5 +1,7 @@
 import { injectable, inject } from 'tsyringe';
+import { getDaysInMonth, getDate } from 'date-fns';
 import IAppointmentRepository from '../repositories/IAppointmentRepository';
+import Appointment from '../infra/typeorm/entities/Appointment';
 
 interface IRequest {
   providerId: string;
@@ -13,7 +15,7 @@ type Response = Array<{
 }>;
 
 @injectable()
-export default class ListProvidersService {
+export default class ListProviderMonthAvailabilityService {
   constructor(
     @inject('AppointmentsRepository')
     private appointmentsRepository: IAppointmentRepository
@@ -24,7 +26,7 @@ export default class ListProvidersService {
     month,
     yeah,
   }: IRequest): Promise<Response> {
-    const appointments = this.appointmentsRepository.findByProviderAndYearMonth(
+    const appointments = await this.appointmentsRepository.findByProviderAndYearMonth(
       {
         providerId,
         month,
@@ -32,8 +34,41 @@ export default class ListProvidersService {
       }
     );
 
-    console.log(appointments);
+    interface IAppointmentsByDayHash {
+      [day: number]: Appointment[];
+    }
 
-    return [];
+    const appointmentsByDayHash: IAppointmentsByDayHash = {};
+    const numberOfDaysInMonth = getDaysInMonth(new Date(month, yeah - 1));
+
+    appointments.forEach(appointment => {
+      const appointmentDay = getDate(appointment.date);
+
+      if (appointmentsByDayHash[appointmentDay]) {
+        appointmentsByDayHash[appointmentDay].push(appointment);
+      } else {
+        appointmentsByDayHash[appointmentDay] = [appointment];
+      }
+    });
+
+    const availability = Array.from(
+      { length: numberOfDaysInMonth },
+      (_, index) => {
+        const day = index + 1;
+
+        if (appointmentsByDayHash[day]) {
+          return {
+            day,
+            available: appointmentsByDayHash[day].length < 10,
+          };
+        }
+        return {
+          day: index + 1,
+          available: true,
+        };
+      }
+    );
+
+    return availability;
   }
 }
