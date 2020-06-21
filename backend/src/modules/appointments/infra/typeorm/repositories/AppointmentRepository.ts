@@ -18,10 +18,12 @@ class AppointmentRepository implements IAppointmentRepository {
 
   public async create({
     providerId,
+    customerId,
     date,
   }: ICreateAppointmentDTO): Promise<Appointment> {
     const appointment = this.ormRepository.create({
       providerId,
+      customerId,
       date,
     });
 
@@ -40,7 +42,7 @@ class AppointmentRepository implements IAppointmentRepository {
 
   public async findByProviderAndYearMonth({
     providerId,
-    yeah,
+    year,
     month,
   }: IFindAppointmentByProviderAndYearMonthDTO): Promise<Appointment[]> {
     const parsedMonth = String(month).padStart(2, '0');
@@ -50,7 +52,7 @@ class AppointmentRepository implements IAppointmentRepository {
         providerId,
         date: Raw(
           dateField =>
-            `to_char(${dateField}, 'MM-YYYY') = ${parsedMonth}-${yeah}`
+            `to_char(${dateField}, 'MM-YYYY') = '${parsedMonth}-${year}'`
         ),
       },
     });
@@ -60,7 +62,7 @@ class AppointmentRepository implements IAppointmentRepository {
     providerId,
     day,
     month,
-    yeah,
+    year,
   }: IFindAllAppointmentsByProviderAndDayDTO): Promise<Appointment[]> {
     const parsedMonth = String(month).padStart(2, '0');
     const parsedDay = String(day).padStart(2, '0');
@@ -70,7 +72,7 @@ class AppointmentRepository implements IAppointmentRepository {
         providerId,
         date: Raw(
           dateField =>
-            `to_char(${dateField}, 'DD-MM-YYYY') = ${parsedDay}-${parsedMonth}-${yeah}`
+            `to_char(${dateField}, 'DD-MM-YYYY') = '${parsedDay}-${parsedMonth}-${year}'`
         ),
       },
     });

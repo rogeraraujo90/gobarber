@@ -6,7 +6,7 @@ import Appointment from '../infra/typeorm/entities/Appointment';
 interface IRequest {
   providerId: string;
   month: number;
-  yeah: number;
+  year: number;
 }
 
 type Response = Array<{
@@ -24,13 +24,13 @@ export default class ListProviderMonthAvailabilityService {
   public async execute({
     providerId,
     month,
-    yeah,
+    year,
   }: IRequest): Promise<Response> {
     const appointments = await this.appointmentsRepository.findByProviderAndYearMonth(
       {
         providerId,
         month,
-        yeah,
+        year,
       }
     );
 
@@ -39,7 +39,7 @@ export default class ListProviderMonthAvailabilityService {
     }
 
     const appointmentsByDayHash: IAppointmentsByDayHash = {};
-    const numberOfDaysInMonth = getDaysInMonth(new Date(month, yeah - 1));
+    const numberOfDaysInMonth = getDaysInMonth(new Date(year, month - 1));
 
     appointments.forEach(appointment => {
       const appointmentDay = getDate(appointment.date);

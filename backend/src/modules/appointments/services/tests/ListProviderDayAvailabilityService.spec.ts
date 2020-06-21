@@ -13,15 +13,18 @@ describe('List provider day availability', () => {
 
   it('should not show past hours as available', async () => {
     const providerId = 'user';
+    const customerId = 'customer';
 
     await appointmentsRepository.create({
       providerId,
-      date: new Date(2020, 5, 14, 10, 0, 0),
+      customerId,
+      date: new Date(2020, 6, 14, 10, 0, 0),
     });
 
     await appointmentsRepository.create({
       providerId,
-      date: new Date(2020, 5, 14, 12, 0, 0),
+      customerId,
+      date: new Date(2020, 6, 14, 12, 0, 0),
     });
 
     jest.spyOn(Date, 'now').mockImplementationOnce(() => {
@@ -31,8 +34,8 @@ describe('List provider day availability', () => {
     const availability = await service.execute({
       providerId,
       day: 14,
-      month: 5,
-      yeah: 2020,
+      month: 6,
+      year: 2020,
     });
 
     expect(availability).toEqual(

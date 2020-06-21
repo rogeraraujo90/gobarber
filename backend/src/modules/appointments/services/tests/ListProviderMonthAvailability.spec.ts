@@ -13,9 +13,11 @@ describe('List provider month availability', () => {
 
   it('should be able to list the month availability from a provider', async () => {
     const providerId = 'user';
+    const customerId = 'customer';
 
     await appointmentsRepository.create({
       providerId,
+      customerId,
       date: new Date(2020, 4, 13, 6, 0, 0),
     });
 
@@ -26,6 +28,7 @@ describe('List provider month availability', () => {
       createAppointmentsPromises.push(
         appointmentsRepository.create({
           providerId,
+          customerId,
           date: new Date(2020, 5, 14, hour, 0, 0),
         })
       );
@@ -36,13 +39,14 @@ describe('List provider month availability', () => {
     await Promise.all(createAppointmentsPromises);
     await appointmentsRepository.create({
       providerId,
+      customerId,
       date: new Date(2020, 5, 15, 6, 0, 0),
     });
 
     const availability = await service.execute({
       providerId,
       month: 5,
-      yeah: 2020,
+      year: 2020,
     });
 
     expect(availability).toEqual(

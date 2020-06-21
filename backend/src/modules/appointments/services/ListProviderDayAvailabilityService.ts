@@ -7,7 +7,7 @@ interface IRequest {
   providerId: string;
   day: number;
   month: number;
-  yeah: number;
+  year: number;
 }
 
 type Response = Array<{
@@ -26,14 +26,14 @@ export default class ListProviderDayAvailabilityService {
     providerId,
     day,
     month,
-    yeah,
+    year,
   }: IRequest): Promise<Response> {
     const appointments = await this.appointmentsRepository.findAllByProviderAndDay(
       {
         providerId,
         day,
         month,
-        yeah,
+        year,
       }
     );
 
@@ -55,7 +55,7 @@ export default class ListProviderDayAvailabilityService {
       { length: numberOfWorkHours },
       (_, index) => {
         const hour = index + startHour;
-        const compareDate = new Date(yeah, month, day, hour);
+        const compareDate = new Date(year, month - 1, day, hour);
 
         return {
           hour,

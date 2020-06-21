@@ -15,7 +15,7 @@ import ITemplateMailProvider from '@shared/providers/template/ITemplateMailProvi
 import HandlebarsMailTemplateProvider from '@shared/providers/template/implementations/HandlebarsMailTemplateProvider';
 
 container.registerSingleton<IAppointmentRepository>(
-  'AppoitmentRepository',
+  'AppointmentsRepository',
   AppointmentRepository
 );
 container.registerSingleton<IUserRepository>('UserRepository', UserRepository);
