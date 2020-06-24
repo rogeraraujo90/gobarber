@@ -1,8 +1,11 @@
 import 'express-async-errors';
 import 'reflect-metadata';
+import 'dotenv/config';
 
 import express, { json, Request, Response, NextFunction } from 'express';
 import cors from 'cors';
+import { errors } from 'celebrate';
+
 import uploadConfig from '@config/upload';
 import '@shared/infra/typeorm';
 import '@shared/container';
@@ -15,6 +18,7 @@ app.use(cors());
 app.use('/files', express.static(uploadConfig.uploadsPath));
 app.use(json());
 app.use(routes);
+app.use(errors());
 
 app.use(
   (error: Error, request: Request, response: Response, _: NextFunction) => {

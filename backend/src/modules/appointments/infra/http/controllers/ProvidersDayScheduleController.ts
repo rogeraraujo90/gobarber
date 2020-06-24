@@ -9,12 +9,12 @@ class ProvidersDayScheduleController {
     );
 
     const providerId = request.user.id;
-    const { day, month, year } = request.body;
+    const { day, month, year } = request.query;
 
     const schedule = await listProviderDayScheduleService.execute({
-      day,
-      month,
-      year,
+      day: Number(day),
+      month: Number(month),
+      year: Number(year),
       providerId,
     });
 

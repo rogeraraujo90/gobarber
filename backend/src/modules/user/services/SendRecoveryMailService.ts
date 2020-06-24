@@ -48,7 +48,7 @@ export default class SendRecoveryMailService {
           template: await this.storageProvider.readFile(forgotMailTemplatePath),
           variables: {
             name: user.name,
-            link: `http://localhost:3000/reset_password?token=${id}`,
+            link: `${process.env.APP_HOST}/reset_password?token=${id}`,
           },
         },
       });

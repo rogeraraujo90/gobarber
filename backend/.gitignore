@@ -6,3 +6,5 @@ tmp/**
 !tmp/uploaded_avatars
 yarn-error*
 coverage
+.env
+ormconfig.json

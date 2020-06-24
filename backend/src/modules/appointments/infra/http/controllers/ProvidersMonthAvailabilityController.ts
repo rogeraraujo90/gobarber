@@ -9,11 +9,11 @@ class ProvidersMonthAvailabilityController {
     );
 
     const providerId = request.params.provider_id;
-    const { month, year } = request.body;
+    const { month, year } = request.query;
 
     const availability = await listProviderMonthAvailabilityService.execute({
-      month,
-      year,
+      month: Number(month),
+      year: Number(year),
       providerId,
     });
 
