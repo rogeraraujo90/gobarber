@@ -13,25 +13,36 @@ import IMailProvider from '@shared/providers/mail/IMailProvider';
 import EtherealMailProvider from '@shared/providers/mail/implementations/EtherealMailProvider';
 import ITemplateMailProvider from '@shared/providers/template/ITemplateMailProvider';
 import HandlebarsMailTemplateProvider from '@shared/providers/template/implementations/HandlebarsMailTemplateProvider';
+import INotificationRepository from '@modules/notifications/repositories/INotificationRepository';
+import NotificationRepository from '@modules/notifications/infra/typeorm/repositories/NotificationRepository';
 
 container.registerSingleton<IAppointmentRepository>(
   'AppointmentsRepository',
   AppointmentRepository
 );
+
 container.registerSingleton<IUserRepository>('UserRepository', UserRepository);
+
 container.registerSingleton<IResetPasswordTokenRepository>(
   'ResetPasswordTokenRepository',
   ResetPasswordTokenRepository
 );
 
 container.registerSingleton<IHashProvider>('HashProvider', BCryptHashProvider);
+
 container.registerSingleton<IStorageProvider>(
   'StorageProvider',
   DiskStorageProvider
 );
+
 container.registerSingleton<ITemplateMailProvider>(
   'MailTemplateProvider',
   HandlebarsMailTemplateProvider
+);
+
+container.registerSingleton<INotificationRepository>(
+  'NotificationRepository',
+  NotificationRepository
 );
 
 // There is async code in the constructor of EtherealMailProvider.

@@ -1,9 +1,8 @@
-import express, { json, Request, Response, NextFunction } from 'express';
 import 'express-async-errors';
-
-import cors from 'cors';
 import 'reflect-metadata';
 
+import express, { json, Request, Response, NextFunction } from 'express';
+import cors from 'cors';
 import uploadConfig from '@config/upload';
 import '@shared/infra/typeorm';
 import '@shared/container';
