@@ -1,4 +1,5 @@
 import { container } from 'tsyringe';
+import mailConfig from '@config/mail';
 import AppointmentRepository from '@modules/appointments/infra/typeorm/repositories/AppointmentRepository';
 import UserRepository from '@modules/user/infra/typeorm/repositories/UserRepository';
 import IAppointmentRepository from '@modules/appointments/repositories/IAppointmentRepository';
@@ -15,6 +16,7 @@ import ITemplateMailProvider from '@shared/providers/template/ITemplateMailProvi
 import HandlebarsMailTemplateProvider from '@shared/providers/template/implementations/HandlebarsMailTemplateProvider';
 import INotificationRepository from '@modules/notifications/repositories/INotificationRepository';
 import NotificationRepository from '@modules/notifications/infra/typeorm/repositories/NotificationRepository';
+import SESMailProvider from '@shared/providers/mail/implementations/SESMailProvider';
 
 container.registerSingleton<IAppointmentRepository>(
   'AppointmentsRepository',
@@ -49,5 +51,7 @@ container.registerSingleton<INotificationRepository>(
 // We need instantiate EtherealMailProvider togheter with the server bootstrap to ensure that transporter is ready
 container.registerInstance<IMailProvider>(
   'MailProvider',
-  container.resolve(EtherealMailProvider)
+  mailConfig.driver === 'ethereal'
+    ? container.resolve(EtherealMailProvider)
+    : container.resolve(SESMailProvider)
 );
