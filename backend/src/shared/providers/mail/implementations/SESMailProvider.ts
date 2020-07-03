@@ -48,8 +48,6 @@ class SESMailProvider implements IMailProvider {
       html: await this.mailTemplateProvider.parse(templateData),
     };
 
-    console.log(message);
-
     await this.transporter.sendMail(message);
   }
 }

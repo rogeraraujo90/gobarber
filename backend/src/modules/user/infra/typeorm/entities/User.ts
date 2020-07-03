@@ -27,8 +27,8 @@ class User {
   avatar: string;
 
   @Expose({ name: 'avatar_url' })
-  get avatarUrl(): string {
-    return `${process.env.API_HOST}/files/${this.avatar}`;
+  get avatarUrl(): string | null {
+    return this.avatar ? `${process.env.API_HOST}/files/${this.avatar}` : null;
   }
 
   @CreateDateColumn()
