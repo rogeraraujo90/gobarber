@@ -13,6 +13,7 @@ import NotificationRepository from '@modules/notifications/infra/typeorm/reposit
 import '../providers/template/container';
 import '../providers/mail/container';
 import '../providers/storage/container';
+import '../providers/cache/container';
 
 container.registerSingleton<IAppointmentRepository>(
   'AppointmentsRepository',

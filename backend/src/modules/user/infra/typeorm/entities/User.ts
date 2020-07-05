@@ -6,6 +6,7 @@ import {
   UpdateDateColumn,
 } from 'typeorm';
 import { Exclude, Expose } from 'class-transformer';
+import storageConfig from '@config/storage';
 
 @Entity('users')
 class User {
@@ -28,7 +29,15 @@ class User {
 
   @Expose({ name: 'avatar_url' })
   get avatarUrl(): string | null {
-    return this.avatar ? `${process.env.API_HOST}/files/${this.avatar}` : null;
+    if (!this.avatar) {
+      return null;
+    }
+
+    if (storageConfig.driver === 'disk') {
+      return `${process.env.API_HOST}/files/${this.avatar}`;
+    }
+
+    return `https://${process.env.AVATARS_BUCKET}.s3-sa-east-1.amazonaws.com/${this.avatar}`;
   }
 
   @CreateDateColumn()
