@@ -48,10 +48,6 @@ export default class CreateSessionService {
 
     const { secret, expiresIn } = config.jwt;
 
-    if (!secret) {
-      throw new AppError('JWT secret not configured.');
-    }
-
     const token = sign({}, secret, {
       subject: user.id,
       expiresIn,

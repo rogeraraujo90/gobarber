@@ -3,18 +3,15 @@ import AppError from '@shared/errors/AppError';
 import FakeUsersRepository from '@modules/user/repositories/fakes/FakeUsersRepository';
 import FakeHashProvider from '@shared/providers/hash/fakes/FakeHashProvider';
 import CreateSessionService from '../CreateSessionService';
-import CreateUserService from '../CreateUserService';
 
 let fakeRepository: FakeUsersRepository;
 let hashProvider: FakeHashProvider;
-let createUserService: CreateUserService;
 let service: CreateSessionService;
 
 describe('Create Session', () => {
   beforeEach(() => {
     fakeRepository = new FakeUsersRepository();
     hashProvider = new FakeHashProvider();
-    createUserService = new CreateUserService(fakeRepository, hashProvider);
     service = new CreateSessionService(fakeRepository, hashProvider);
   });
 
@@ -24,7 +21,7 @@ describe('Create Session', () => {
       email: 'arya@gobarber.com',
       password: '123456',
     };
-    const createdUser = await createUserService.execute(userData);
+    const createdUser = await fakeRepository.create(userData);
     const session = await service.execute({
       email: 'arya@gobarber.com',
       password: '123456',
@@ -51,7 +48,7 @@ describe('Create Session', () => {
       password: '123456',
     };
 
-    await createUserService.execute(userData);
+    await fakeRepository.create(userData);
 
     await expect(
       service.execute({

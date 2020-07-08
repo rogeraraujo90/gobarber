@@ -2,10 +2,12 @@ import 'reflect-metadata';
 import AppError from '@shared/errors/AppError';
 import FakeUsersRepository from '@modules/user/repositories/fakes/FakeUsersRepository';
 import FakeHashProvider from '@shared/providers/hash/fakes/FakeHashProvider';
+import FakeCacheProvider from '@shared/providers/cache/fakes/FakeCacheProvider';
 import CreateUserService from '../CreateUserService';
 
 let fakeRepository: FakeUsersRepository;
 let hashProvider: FakeHashProvider;
+let cacheProvider: FakeCacheProvider;
 let service: CreateUserService;
 let userData: {
   name: string;
@@ -17,7 +19,12 @@ describe('Create Appointment', () => {
   beforeEach(() => {
     fakeRepository = new FakeUsersRepository();
     hashProvider = new FakeHashProvider();
-    service = new CreateUserService(fakeRepository, hashProvider);
+    cacheProvider = new FakeCacheProvider();
+    service = new CreateUserService(
+      fakeRepository,
+      hashProvider,
+      cacheProvider
+    );
     userData = {
       name: 'Arya Stark',
       email: 'arya@gobarber.com',

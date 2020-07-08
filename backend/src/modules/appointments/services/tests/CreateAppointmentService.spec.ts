@@ -1,11 +1,13 @@
 import 'reflect-metadata';
 import AppError from '@shared/errors/AppError';
 import FakeNotificationRepository from '@modules/notifications/repositories/fakes/FakeNotificationRepository';
+import FakeCacheProvider from '@shared/providers/cache/fakes/FakeCacheProvider';
 import CreateAppointmentService from '../CreateAppointmentService';
 import FakeAppointmentsRepository from '../../repositories/fakes/FakeAppointmentsRepository';
 
 let fakeRepository: FakeAppointmentsRepository;
 let fakeNotificationRepository: FakeNotificationRepository;
+let fakeCacheProvider: FakeCacheProvider;
 let service: CreateAppointmentService;
 let providerId: string;
 let customerId: string;
@@ -14,10 +16,12 @@ describe('Create Appointment', () => {
   beforeEach(() => {
     fakeRepository = new FakeAppointmentsRepository();
     fakeNotificationRepository = new FakeNotificationRepository();
+    fakeCacheProvider = new FakeCacheProvider();
 
     service = new CreateAppointmentService(
       fakeRepository,
-      fakeNotificationRepository
+      fakeNotificationRepository,
+      fakeCacheProvider
     );
 
     providerId = '1234';
