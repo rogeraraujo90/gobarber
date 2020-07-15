@@ -15,6 +15,10 @@ describe('List provider month availability', () => {
     const providerId = 'user';
     const customerId = 'customer';
 
+    jest.spyOn(Date, 'now').mockImplementationOnce(() => {
+      return new Date(2020, 2, 19).getTime();
+    });
+
     await appointmentsRepository.create({
       providerId,
       customerId,

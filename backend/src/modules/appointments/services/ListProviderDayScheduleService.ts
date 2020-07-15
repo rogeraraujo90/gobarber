@@ -1,5 +1,6 @@
 import { injectable, inject } from 'tsyringe';
 import ICacheProvider from '@shared/providers/cache/ICacheProvider';
+import { classToClass } from 'class-transformer';
 import IAppointmentRepository from '../repositories/IAppointmentRepository';
 import Appointment from '../infra/typeorm/entities/Appointment';
 
@@ -42,7 +43,7 @@ export default class ListProviderDayScheduleService {
       }
     );
 
-    this.cache.save(cacheKey, appointments);
+    this.cache.save(cacheKey, classToClass(appointments));
 
     return appointments;
   }
