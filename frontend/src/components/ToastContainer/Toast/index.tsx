@@ -24,15 +24,18 @@ const Toast: React.FC<ToastProps> = ({ message, style }) => {
   const { removeToast } = useToast();
 
   useEffect(() => {
-    const autoCloseTimer = setTimeout(() => removeToast(message.id), 3000);
+    const autoCloseTimer = setTimeout(
+      () => removeToast(message.id),
+      message.duration || 3000
+    );
 
     return () => clearInterval(autoCloseTimer);
-  }, [message.id, removeToast]);
+  }, [message.duration, message.id, removeToast]);
 
   return (
     <Container
       type={message.type}
-      hasDescription={!!message.description}
+      hasdescription={Number(!!message.description)}
       style={style}
     >
       {toastIcon[message.type || 'info']}

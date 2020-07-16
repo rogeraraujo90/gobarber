@@ -8,6 +8,7 @@ export interface ToastMessage {
   title: string;
   type?: 'info' | 'success' | 'error';
   description?: string;
+  duration?: number;
 }
 
 interface ToastContextData {
@@ -21,7 +22,7 @@ const ToastContextProvider: React.FC = ({ children }) => {
   const [toastMessages, updateToastMessages] = useState<ToastMessage[]>([]);
 
   const addToast = useCallback(
-    ({ title, description, type }: Omit<ToastMessage, 'id'>) => {
+    ({ title, description, type, duration }: Omit<ToastMessage, 'id'>) => {
       const id = uuid();
 
       const toastMessage = {
@@ -29,6 +30,7 @@ const ToastContextProvider: React.FC = ({ children }) => {
         title,
         description,
         type,
+        duration,
       };
 
       updateToastMessages((currentMessages) => [

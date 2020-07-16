@@ -1,7 +1,12 @@
-import styled from 'styled-components';
+import styled, { css } from 'styled-components';
 import { shade } from 'polished';
+import { ButtonHTMLAttributes } from 'react';
 
-const Container = styled.button`
+type ButtonProps = ButtonHTMLAttributes<HTMLButtonElement> & {
+  isLoading?: number;
+};
+
+const Container = styled.button<ButtonProps>`
   border: 0;
   background: #ff9000;
   border-radius: 10px;
@@ -13,9 +18,19 @@ const Container = styled.button`
   font-weight: 500;
   transition: background-color 0.2s;
 
-  &:hover {
-    background-color: ${shade(0.2, '#ff9000')};
-  }
+  ${({ isLoading }) => {
+    if (isLoading) {
+      return css`
+        opacity: 0.6;
+      `;
+    }
+
+    return css`
+      &:hover {
+        background-color: ${shade(0.2, '#ff9000')};
+      }
+    `;
+  }};
 `;
 
 export { Container };

@@ -1,4 +1,4 @@
-import React, { useRef, useCallback } from 'react';
+import React, { useRef, useCallback, useState } from 'react';
 import { FiLogIn, FiMail } from 'react-icons/fi';
 import { Form } from '@unform/web';
 import * as Yup from 'yup';
@@ -12,12 +12,14 @@ import Button from '../../components/Button';
 import { Container, Content, Background, AnimatedForm } from './styles';
 import getValidationErrors from '../../utils/getValidationErrors';
 import { useToast } from '../../hooks/toast';
+import api from '../../services/api';
 
 interface FormData {
   email: string;
 }
 
 const ForgotPassword: React.FC = () => {
+  const [isLoading, setIsLoading] = useState(false);
   const formRef = useRef<FormHandles>(null);
   const { addToast } = useToast();
 
@@ -33,9 +35,18 @@ const ForgotPassword: React.FC = () => {
 
       try {
         await validator.validate(data, { abortEarly: false });
+
+        setIsLoading(true);
+
+        await api.post('/passwords/forgot', {
+          email: data.email,
+        });
+
         addToast({
-          title: 'Em breve',
-          description: 'Uma nova feature está vindo!',
+          title: 'Email de recuperação enviado',
+          description:
+            'Enviamos um email para redifinição da senha. Confira sua caixa de entrada.',
+          duration: 10000,
         });
       } catch (error) {
         if (error instanceof Yup.ValidationError) {
@@ -48,6 +59,8 @@ const ForgotPassword: React.FC = () => {
             type: 'error',
           });
         }
+      } finally {
+        setIsLoading(false);
       }
     },
     [addToast]
@@ -64,7 +77,9 @@ const ForgotPassword: React.FC = () => {
 
             <Input name="email" icon={FiMail} placeholder="E-mail" />
 
-            <Button type="submit">Recuperar</Button>
+            <Button type="submit" isLoading={isLoading}>
+              Recuperar
+            </Button>
           </Form>
 
           <Link to="/">
