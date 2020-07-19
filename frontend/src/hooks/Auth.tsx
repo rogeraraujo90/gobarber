@@ -2,7 +2,9 @@ import React, { createContext, useCallback, useState, useContext } from 'react';
 import api from '../services/api';
 
 interface LoggedUser {
+  id: string;
   name: string;
+  email: string;
   avatar_url: string;
 }
 
@@ -21,6 +23,7 @@ interface AuthContextData {
   signIn(credentials: Credentials): Promise<void>;
   signOut(): void;
   isAuthenticated(): boolean;
+  updateUser(user: LoggedUser): void;
 }
 
 const AuthContext = createContext<AuthContextData>({} as AuthContextData);
@@ -31,6 +34,10 @@ const AuthContextProvider: React.FC = ({ children }) => {
     const loggedUser = sessionStorage.getItem('@GoBarber:loggedUser');
 
     if (token && loggedUser) {
+      api.defaults.headers = {
+        Authorization: `Bearer ${token}`,
+      };
+
       return { token, loggedUser: JSON.parse(loggedUser) };
     }
 
@@ -56,6 +63,18 @@ const AuthContextProvider: React.FC = ({ children }) => {
     setSessionData({} as SessionData);
   }, []);
 
+  const updateUser = useCallback(
+    (user: LoggedUser) => {
+      setSessionData({
+        token: sessionData.token,
+        loggedUser: user,
+      });
+
+      sessionStorage.setItem('@GoBarber:loggedUser', JSON.stringify(user));
+    },
+    [sessionData.token]
+  );
+
   const isAuthenticated = useCallback(() => {
     return !!sessionData.loggedUser;
   }, [sessionData.loggedUser]);
@@ -67,6 +86,7 @@ const AuthContextProvider: React.FC = ({ children }) => {
         signIn,
         signOut,
         isAuthenticated,
+        updateUser,
       }}
     >
       {children}

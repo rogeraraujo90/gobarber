@@ -7,6 +7,7 @@ import Dashboard from '../pages/Dashboard';
 import Route from './Route';
 import ForgotPassword from '../pages/ForgotPassword';
 import ResetPassword from '../pages/ResetPassword';
+import Profile from '../pages/Profile';
 
 const Routes: React.FC = () => {
   return (
@@ -17,6 +18,7 @@ const Routes: React.FC = () => {
       <Route path="/reset-password" component={ResetPassword} />
 
       <Route path="/dashboard" component={Dashboard} isPrivated />
+      <Route path="/profile" component={Profile} isPrivated />
     </Switch>
   );
 };
