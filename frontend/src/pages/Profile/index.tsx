@@ -13,6 +13,14 @@ import api from '../../services/api';
 import { useToast } from '../../hooks/toast';
 import { useAuth } from '../../hooks/auth';
 
+interface ProfileFormData {
+  name: string;
+  email: string;
+  oldPassword: string;
+  password: string;
+  passwordConfirmation: string;
+}
+
 const Profile: React.FC = () => {
   const formRef = useRef<FormHandles>(null);
   const { addToast } = useToast();
@@ -20,7 +28,7 @@ const Profile: React.FC = () => {
   const { loggedUser, updateUser } = useAuth();
 
   const handleFormSubmision = useCallback(
-    async (data) => {
+    async (data: ProfileFormData) => {
       formRef.current?.setErrors({});
 
       const validator = Yup.object().shape({
@@ -28,17 +36,30 @@ const Profile: React.FC = () => {
         email: Yup.string()
           .required('Email obrigatório.')
           .email('Digite um email válido.'),
-        password: Yup.string().min(6, 'Mínimo de 6 caracteres.'),
+        oldPassword: Yup.string(),
+        password: Yup.string().when('oldPassword', {
+          is: (oldPassword) => !!oldPassword.length,
+          then: Yup.string().required().min(6, 'Mínimo de 6 caracteres.'),
+        }),
+        passwordConfirmation: Yup.string().when('oldPassword', {
+          is: (oldPassword) => !!oldPassword.length,
+          then: Yup.string().oneOf(
+            [Yup.ref('password')],
+            'Senhas não são iguais'
+          ),
+        }),
       });
 
       try {
         await validator.validate(data, { abortEarly: false });
 
-        await api.post('/users', data);
+        const { name, email, oldPassword } = data;
+        const updatedData = oldPassword ? data : { name, email };
+
+        await api.patch('/profile', updatedData);
 
         addToast({
-          title: 'Conta criada com sucesso',
-          description: 'Sua foi criada. Faça logon para usar o GoBarber',
+          title: 'Perfil atualizado com sucesso',
           type: 'success',
         });
 
@@ -48,8 +69,9 @@ const Profile: React.FC = () => {
           formRef.current?.setErrors(getValidationErrors(error));
         } else {
           addToast({
-            title: 'Erro ao criar conta',
-            description: 'Ocorreu um erro ao criar sua conta. Tente novamente.',
+            title: 'Erro ao atualizar perfil',
+            description:
+              'Tente novamente. Ou, se o problema persistir, contacte o suporte',
             type: 'error',
           });
         }
