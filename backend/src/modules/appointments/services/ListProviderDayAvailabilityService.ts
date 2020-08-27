@@ -1,5 +1,5 @@
 import { injectable, inject } from 'tsyringe';
-import { getHours, isAfter } from 'date-fns';
+import { getHours, isAfter, isWeekend } from 'date-fns';
 import IAppointmentRepository from '../repositories/IAppointmentRepository';
 import Appointment from '../infra/typeorm/entities/Appointment';
 
@@ -60,7 +60,9 @@ export default class ListProviderDayAvailabilityService {
         return {
           hour,
           available:
-            !appointmentsByDayHash[hour] && isAfter(compareDate, currentDate),
+            !appointmentsByDayHash[hour] &&
+            isAfter(compareDate, currentDate) &&
+            !isWeekend(compareDate),
         };
       }
     );
