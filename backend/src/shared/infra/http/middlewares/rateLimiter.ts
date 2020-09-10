@@ -9,6 +9,10 @@ const redisClient = Redis.createClient({
   enable_offline_queue: false,
 });
 
+if (process.env.REDIS_PASS) {
+  redisClient.auth(process.env.REDIS_PASS);
+}
+
 const limiter = new RateLimiterRedis({
   storeClient: redisClient,
   keyPrefix: 'rateLimiter',
