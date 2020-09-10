@@ -5,7 +5,7 @@ import AppError from '@shared/errors/AppError';
 
 const redisClient = Redis.createClient({
   host: process.env.REDIS_HOST,
-  port: process.env.REDIS_PORT === undefined ? 6379 : 6379,
+  port: process.env.REDIS_PORT ? Number(process.env.REDIS_PORT) : 6379,
   enable_offline_queue: false,
 });
 
