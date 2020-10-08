@@ -2,17 +2,24 @@ import 'reflect-metadata';
 import AppError from '@shared/errors/AppError';
 import FakeUsersRepository from '@modules/user/repositories/fakes/FakeUsersRepository';
 import FakeHashProvider from '@shared/providers/hash/fakes/FakeHashProvider';
+import FakeCacheProvider from '@shared/providers/cache/fakes/FakeCacheProvider';
 import UpdateProfileService from '../UpdateProfileService';
 
 let fakeRepository: FakeUsersRepository;
 let fakeHashProvider: FakeHashProvider;
+let fakeCacheProvider: FakeCacheProvider;
 let service: UpdateProfileService;
 
 describe('Update user profile', () => {
   beforeEach(() => {
     fakeRepository = new FakeUsersRepository();
     fakeHashProvider = new FakeHashProvider();
-    service = new UpdateProfileService(fakeRepository, fakeHashProvider);
+    fakeCacheProvider = new FakeCacheProvider();
+    service = new UpdateProfileService(
+      fakeRepository,
+      fakeHashProvider,
+      fakeCacheProvider
+    );
   });
 
   it('should be able to update the user name', async () => {

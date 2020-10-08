@@ -2,19 +2,23 @@ import 'reflect-metadata';
 import AppError from '@shared/errors/AppError';
 import FakeUsersRepository from '@modules/user/repositories/fakes/FakeUsersRepository';
 import FakeDiskStorageProvider from '@shared/providers/storage/fakes/FakeDiskStorageProvider';
+import FakeCacheProvider from '@shared/providers/cache/fakes/FakeCacheProvider';
 import UpdateUserAvatarService from '../UpdateUserAvatarService';
 
 let fakeRepository: FakeUsersRepository;
 let fakeDiskStorageProvider: FakeDiskStorageProvider;
+let fakeCacheProvider: FakeCacheProvider;
 let service: UpdateUserAvatarService;
 
 describe('Update user avatar', () => {
   beforeEach(() => {
     fakeRepository = new FakeUsersRepository();
     fakeDiskStorageProvider = new FakeDiskStorageProvider();
+    fakeCacheProvider = new FakeCacheProvider();
     service = new UpdateUserAvatarService(
       fakeRepository,
-      fakeDiskStorageProvider
+      fakeDiskStorageProvider,
+      fakeCacheProvider
     );
   });
 
