@@ -28,6 +28,10 @@ const SignUp: React.FC = () => {
           .required('Email obrigatório.')
           .email('Digite um email válido.'),
         password: Yup.string().min(6, 'Mínimo de 6 caracteres.'),
+        passwordConfirmation: Yup.string().oneOf(
+          [Yup.ref('password')],
+          'Senhas não são iguais'
+        ),
       });
 
       try {
@@ -75,6 +79,12 @@ const SignUp: React.FC = () => {
               type="password"
               icon={FiLock}
               placeholder="Senha"
+            />
+            <Input
+              name="passwordConfirmation"
+              type="password"
+              icon={FiLock}
+              placeholder="Repita a senha"
             />
 
             <Button type="submit">Cadastrar</Button>
